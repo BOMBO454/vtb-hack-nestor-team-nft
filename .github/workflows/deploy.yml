@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - main  # Автоматический деплой при пуше в ветку main
+      - main
 
 jobs:
   deploy:
@@ -16,16 +16,21 @@ jobs:
 
       # Шаг 2: Установить SSH-агент и добавить ключ
       - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.9.0
+        uses: webfactory/ssh-agent@v0.5.4
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # Шаг 3: Копировать файлы на сервер
+      # Шаг 3: Добавить сервер в known_hosts
+      - name: Add server to known_hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      # Шаг 4: Копировать файлы на сервер
       - name: Copy files via SSH
         run: |
           scp -r . user1@${{ secrets.SSH_HOST }}:/home/user1/app
 
-      # Шаг 4: Выполнить команды на сервере для деплоя
+      # Шаг 5: Выполнить команды на сервере для деплоя
       - name: Deploy on server
         run: |
           ssh user1@${{ secrets.SSH_HOST }} << 'EOF'
