@@ -1,0 +1,35 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main  # Автоматический деплой при пуше в ветку main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Шаг 1: Checkout репозиторий
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Шаг 2: Установить SSH-агент и добавить ключ
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.8.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # Шаг 3: Копировать файлы на сервер
+      - name: Copy files via SSH
+        run: |
+          scp -r . user1@${{ secrets.SSH_HOST }}:/home/user1/app
+
+      # Шаг 4: Выполнить команды на сервере для деплоя
+      - name: Deploy on server
+        run: |
+          ssh user1@${{ secrets.SSH_HOST }} << 'EOF'
+            cd /home/user1/app
+            docker-compose down
+            docker-compose up -d --build
+          EOF
