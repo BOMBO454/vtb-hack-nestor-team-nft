@@ -28,7 +28,7 @@ jobs:
       # Шаг 4: Копировать файлы на сервер
       - name: Copy files via SSH
         run: |
-          scp -r . user1@${{ secrets.SSH_HOST }}:/home/user1/app
+          scp -r * .[^.]* user1@${{ secrets.SSH_HOST }}:/home/user1/app
 
       # Шаг 5: Выполнить команды на сервере для деплоя
       - name: Deploy on server
