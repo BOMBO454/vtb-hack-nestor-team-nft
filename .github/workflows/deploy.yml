@@ -25,6 +25,10 @@ jobs:
         run: |
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
+      - name: Create app directory if it doesn't exist
+        run: |
+          ssh user1@${{ secrets.SSH_HOST }} "mkdir -p /home/user1/app"
+
       # Шаг 4: Копировать файлы на сервер
       - name: Copy files via SSH
         run: |
