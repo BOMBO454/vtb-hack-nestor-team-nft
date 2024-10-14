@@ -3,8 +3,8 @@ version: '3'
 services:
   frontend:
     build:
-      context: front
-      dockerfile: front/Dockerfile
+      context: ./front  # Указываем относительный путь к папке front
+      dockerfile: Dockerfile  # Dockerfile находится в папке front
     ports:
-      - '80:80' # Пробрасываем порт 80 для внешнего доступа
+      - '80:80'  # Пробрасываем порт 80 для внешнего доступа
     restart: always
