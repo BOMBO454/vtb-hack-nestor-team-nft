@@ -21,7 +21,7 @@ COPY --from=build /app/dist /usr/share/nginx/html
 # Копируем кастомный конфиг nginx (если нужно)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Открываем порт для доступа
+# Открываем порт 80 для доступа
 EXPOSE 80
 
 # Запуск nginx
